@@ -1,0 +1,10 @@
+
+POST /token
+DELETE /token
+
+GET /boxes
+POST /boxes
+GET /cards
+POST /cards
+GET /cards/:card_id/records
+POST /cards/:card_id/records
