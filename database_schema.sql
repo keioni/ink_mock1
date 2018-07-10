@@ -24,6 +24,7 @@ create table boxes (
 )
 
 create table cards (
+    user_id integer,
     card_id integer primary key auto increment,
     card_name varchar(32) not null,
     ctime datetime,
