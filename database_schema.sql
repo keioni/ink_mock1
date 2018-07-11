@@ -3,49 +3,52 @@
 create table tokens (
     rowid integer auto_increment,
     token bigint,
-    user_id integer,
+    user_num integer,
     ctime datetime not null,
     primary key (token),
 )
 
 create table users (
-    rowid integer auto_increment,
-    user_id integer,
-    user_name varchar(64),
+    user_num integer auto_increment,
+    user_id varchar(64),
     password varchar(64) not null,
     ctime datetime,
     mtime datetime,
-    primary key (user_id),
-    index index_username (username),
+    primary key (user_num),
+    index index_id (user_id),
 )
 
 create table boxes (
-    rowid integer auto_increment,
-    box_id integer,
-    user_id integer,
-    box_name varchar(32) not null,
+    box_num integer auto_increment,
+    user_num integer,
+    box_title varchar(32) not null,
     ctime datetime,
     mtime datetime,
-    cards_in_box blob(4096),
-    primary key (box_id),
-    index index_user (user_id),
+    primary key (box_num),
+    index index_user (user_num),
 )
 
 create table cards (
-    rowid integer auto_increment,
-    card_id integer,
-    box_id integer,
-    user_id integer,
-    card_name varchar(32) not null,
+    card_num integer auto_increment,
+    box_num integer,
+    user_num integer,
+    card_title varchar(32) not null,
     ctime datetime,
     mtime datetime,
-    records_in_card blob(4096),
-    primary key (card_id),
-    index index_user_box (user_id, box_id),
+    recent_records char(340),
+    primary key (card_num),
+    index index_user_box (user_num, box_num),
 )
 
-select * from boxes where user_id=$UID
-select * from cards where user_id=$UID and box_id=$BID
+create table records (
+    rowid integer auto_increment,
+    card_num integer,
+    record char(16),
+    primary key (rowid),
+    index index_card (card_num),
+)
 
-insert into boxes (hogehoge)
-update boxes set card_id = LAST_INSERT_ID() where rowid = LAST_INSERT_ID()
+select * from boxes where user_num=$UID
+select * from cards where user_num=$UID
+select * from cards where user_num=$UID and box_num=$BID
+select record from records where card_num=$CID
