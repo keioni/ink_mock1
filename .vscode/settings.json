@@ -1,0 +1,16 @@
+{
+    "python.pythonPath": "C:\\Users\\Keys\\AppData\\Local\\Programs\\Python\\Python36\\python.exe",
+    "python.unitTest.pyTestEnabled": true,
+    "python.unitTest.pyTestArgs": [ "-v" ],
+    "editor.wordWrap": "on",
+    "editor.wordWrapColumn": 80,
+    "editor.wrappingIndent": "none",
+    "editor.find.autoFindInSelection": true,
+    "editor.links": false,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "python.autoComplete.addBrackets": true,
+    "python.linting.pylintUseMinimalCheckers": true,
+    "python.autoComplete.showAdvancedMembers": true,
+    "editor.snippetSuggestions": "inline",
+}
