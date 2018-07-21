@@ -4,10 +4,6 @@
 import mysql.connector
 
 
-class Tokens:
-    pass
-
-
 class Records:
     db_conn_elem: dict
 
@@ -40,3 +36,7 @@ class Records:
         cur = self.conn.cursor()
         sql_args = list(card_num)
         cur.execute(sql_stmt, sql_args)
+
+
+def get_all():
+    pass
