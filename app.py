@@ -9,6 +9,7 @@
 from flask import Flask
 from flask import request, redirect
 
+
 app = Flask(__name__)
 app.config.from_envvar('FLASK_SETTINGS', silent=True)
 

@@ -23,7 +23,7 @@ class Records:
 
     def get_cards(self, user_num: int, box_num: int) -> list:
         sql_stmt = '''
-            select * from cards where user_nume = ? and box_num = ?
+            select * from cards where user_num = ? and box_num = ?
         '''
         cur = self.conn.cursor()
         sql_args = list(user_num, box_num)
