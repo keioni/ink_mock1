@@ -10,7 +10,7 @@ create table tokens (
 
 create table users (
     user_id integer auto_increment,
-    username varchar(64),
+    username varchar(64) unique,
     password varchar(64) not null,
     ctime datetime,
     mtime datetime,
