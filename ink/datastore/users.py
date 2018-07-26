@@ -3,38 +3,43 @@
 
 import mysql.connector
 
+from ink.util.security import secure_hashing
+
 
 class Users:
     db_conn_elem: dict
 
     def __init__(self):
         self.conn = mysql.connector.connect(self.db_conn_elem)
+        self.salt = 'hoge' # XXX
 
     def get_uid(self, username: str) -> int:
         sql_stmt = '''
             select user_id from users where username = '?'
         '''
+        user_id = 0
         cur = self.conn.cursor()
         sql_args = list(username)
         cur.execute(sql_stmt, sql_args)
         row = cur.fetchone()
         if row:
-            return int(row[0])
-        else:
-            return 0
+            user_id = int(row[0])
+        cur.close()
+        return user_id
 
     def get_username(self, user_id: int) -> str:
         sql_stmt = '''
             select username from users where user_id = ?
         '''
+        username = ''
         cur = self.conn.cursor()
         sql_args = list(user_id)
         cur.execute(sql_stmt, sql_args)
         row = cur.fetchone()
         if row:
-            return str(row[0])
-        else:
-            return ''
+            username = str(row[0])
+        cur.close()
+        return username
 
     def add_user(self, username: str, password: str) -> int:
         # XXX
@@ -43,5 +48,17 @@ class Users:
     def delete_user(self, user_id: int) -> bool:
         pass
 
-    def auth_user(self, user_id: int, password: str) -> bool:
-        pass
+    def auth_user(self, username: str, password: str) -> bool:
+        sql_stmt = '''
+            select password from users where username = '?'
+        '''
+        stored_password = ''
+        input_password = secure_hashing(username, self.salt)
+        cur = self.conn.cursor()
+        sql_args = list(username)
+        cur.execute(sql_stmt, sql_args)
+        row = cur.fetchone()
+        if row:
+            stored_password = str(row[0])
+        cur.close()
+        return stored_password == input_password
