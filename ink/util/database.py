@@ -71,13 +71,15 @@ class DBMaintainer:
     }
 
     def __execute_statements(self, statements: list):
-        conn = mysql.connector.connect(self.db_elem)
-        cursor = conn.cursor()
-        for stmt in statements:
-            cursor.execute(stmt)
-        cursor.close()
-        conn.commit()
-        conn.close()
+        with mysql.connector.connect(self.db_elem) as conn:
+            try:
+                cursor = conn.cursor()
+                for statement in statements:
+                    cursor.execute(statement)
+                cursor.close()
+                conn.commit()
+            except:
+                conn.rollback()
 
     def __get_defined_tables(self) -> list:
         tables = list()
