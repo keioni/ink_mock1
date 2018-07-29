@@ -4,13 +4,13 @@
 import mysql.connector
 
 from ink.util.security import secure_hashing
+from ink.sys.config import CONF
 
 
 class Users:
-    db_conn_elem: dict
 
     def __init__(self):
-        self.conn = mysql.connector.connect(self.db_conn_elem)
+        self.conn = mysql.connector.connect(**CONF.db_connect_config)
         self.salt = 'hoge' # XXX
 
     def get_uid(self, username: str) -> int:

@@ -1,7 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import mysql.connector
+
+from ink.sys.config import CONF
 
 
 class DBMaintainer:
@@ -14,9 +15,7 @@ class DBMaintainer:
     # select * from cards where user_id=$UID and box_id=$BID
     # select record from records where card_id=$CID
 
-    db_elem = dict()
-
-    table_defs = {
+    TABLE_DEFS = {
     'tokens': '''
         create table tokens (
             rowid integer auto_increment,
@@ -70,20 +69,22 @@ class DBMaintainer:
     '''
     }
 
-    def __execute_statements(self, statements: list):
-        with mysql.connector.connect(self.db_elem) as conn:
+    def __execute_statements(self, statements: list) -> bool:
+        try:
+            conn = mysql.connector.connect(**CONF.db_connect_config)
+            cursor = conn.cursor()
             try:
-                cursor = conn.cursor()
                 for statement in statements:
                     cursor.execute(statement)
-                cursor.close()
                 conn.commit()
-            except:
-                conn.rollback()
+            finally:
+                cursor.close()
+        finally:
+            conn.close()
 
     def __get_defined_tables(self) -> list:
         tables = list()
-        for table_name in self.table_defs.keys():
+        for table_name in self.TABLE_DEFS.keys():
             tables.append(table_name)
         return tables
 
@@ -92,7 +93,7 @@ class DBMaintainer:
             tables = self.__get_defined_tables()
         statements = list()
         for table in tables:
-            statements.append(self.table_defs[table])
+            statements.append(self.TABLE_DEFS[table])
         self.__execute_statements(statements)
 
     def cleanup(self, tables: list=None):
