@@ -5,12 +5,12 @@
 class DBMaintainer:
     '''
     INK System Database Maintainer
-
-    select * from boxes where user_id=$UID
-    select * from cards where user_id=$UID
-    select * from cards where user_id=$UID and box_id=$BID
-    select record from records where card_id=$CID
     '''
+
+    # select * from boxes where user_id=$UID
+    # select * from cards where user_id=$UID
+    # select * from cards where user_id=$UID and box_id=$BID
+    # select record from records where card_id=$CID
 
     table_defs = {
     'tokens': '''
