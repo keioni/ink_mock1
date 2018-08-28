@@ -26,7 +26,7 @@ class DBMaintainer:
         )
     ''',
     'users': '''
-        create table tokens (
+        create table users (
             rowid integer auto_increment,
             token bigint,
             user_id integer,
@@ -69,18 +69,9 @@ class DBMaintainer:
     '''
     }
 
-    def __execute_statements(self, statements: list) -> bool:
-        try:
-            conn = mysql.connector.connect(**CONF.db_connect_config)
-            cursor = conn.cursor()
-            try:
-                for statement in statements:
-                    cursor.execute(statement)
-                conn.commit()
-            finally:
-                cursor.close()
-        finally:
-            conn.close()
+    def __init__(self):
+        self.conn = mysql.connector.connect(**CONF.db_connect_config)
+        self.conn.autocommit(False)
 
     def __get_defined_tables(self) -> list:
         tables = list()
@@ -88,18 +79,51 @@ class DBMaintainer:
             tables.append(table_name)
         return tables
 
-    def setup(self, tables: list=None):
+    def execute(self, statements: list) -> bool:
+        result = False
+        cursor = self.conn.cursor()
+        if cursor:
+            try:
+                for statement in statements:
+                    cursor.execute(statement)
+                self.conn.commit()
+                result = True
+            except mysql.connector.Error:
+                self.conn.rollback()
+            finally:
+                cursor.close()
+        return result
+
+    def __select(self, statement: str, fetch_type: str = 'all') -> tuple:
+        result = tuple()
+        cursor = self.conn.cursor()
+        if cursor:
+            cursor.execute(statement)
+            if fetch_type == 'all':
+                result = tuple(cursor.fetchall())
+            elif fetch_type == 'one':
+                result = tuple(cursor.fetchone())
+            cursor.close()
+        return result
+
+    def fetchone(self, statement) -> tuple:
+        return self.__select(statement, 'one')
+
+    def fetchall(self, statement) -> tuple:
+        return self.__select(statement, 'all')
+
+    def create_tables(self, tables: list=None) -> bool:
         if not tables:
             tables = self.__get_defined_tables()
         statements = list()
         for table in tables:
             statements.append(self.TABLE_DEFS[table])
-        self.__execute_statements(statements)
+        return self.execute(statements)
 
-    def cleanup(self, tables: list=None):
+    def destroy_tables(self, tables: list=None) -> bool:
         if not tables:
             tables = self.__get_defined_tables()
         statements = list()
         for table in tables:
             statements.append('drop table {}'.format(table))
-        self.__execute_statements(statements)
+        return self.execute(statements)
