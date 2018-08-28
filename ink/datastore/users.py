@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from ink.util.security import secure_hashing
-from ink.util.database import DBMaintainer
 from ink.sys.config import CONF
+import ink.sys.database
 
 
 class Users:
 
     def __init__(self):
-        self.dbm = DBMaintainer()
+        self.dbc = ink.sys.database.Connector(CONF.db_connect_config)
         self.salt = 'hoge' # XXX
 
     def get_uid(self, username: str) -> int:
@@ -17,7 +17,7 @@ class Users:
         '''
         user_id = 0
         statement = (sql_stmt, (username))
-        row = self.dbm.fetchone(statement)
+        row = self.dbc.fetchone(statement)
         if row:
             user_id = int(row[0])
         return user_id
@@ -28,7 +28,7 @@ class Users:
         '''
         username = ''
         statement = (sql_stmt, (user_id))
-        row = self.dbm.fetchone(statement)
+        row = self.dbc.fetchone(statement)
         if row:
             username = str(row[0])
         return username
@@ -47,7 +47,7 @@ class Users:
         stored_password = ''
         input_password = secure_hashing(password, self.salt)
         statement = (sql_stmt, (username))
-        row = self.dbm.fetchone(statement)
+        row = self.dbc.fetchone(statement)
         if row:
             stored_password = str(row[0])
         return stored_password == input_password

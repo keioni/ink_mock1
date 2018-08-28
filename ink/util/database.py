@@ -3,6 +3,7 @@
 import mysql.connector
 
 from ink.sys.config import CONF
+from ink.sys.database import DatabaseConnector
 
 
 class DBMaintainer:
@@ -70,8 +71,7 @@ class DBMaintainer:
     }
 
     def __init__(self):
-        self.conn = mysql.connector.connect(**CONF.db_connect_config)
-        self.conn.autocommit(False)
+        self.dbc = DatabaseConnector(CONF.db_connect_config)
 
     def __get_defined_tables(self) -> list:
         tables = list()
@@ -79,46 +79,13 @@ class DBMaintainer:
             tables.append(table_name)
         return tables
 
-    def execute(self, statements: list) -> bool:
-        result = False
-        cursor = self.conn.cursor()
-        if cursor:
-            try:
-                for statement in statements:
-                    cursor.execute(statement)
-                self.conn.commit()
-                result = True
-            except mysql.connector.Error:
-                self.conn.rollback()
-            finally:
-                cursor.close()
-        return result
-
-    def __select(self, statement: str, fetch_type: str = 'all') -> tuple:
-        result = tuple()
-        cursor = self.conn.cursor()
-        if cursor:
-            cursor.execute(statement)
-            if fetch_type == 'all':
-                result = tuple(cursor.fetchall())
-            elif fetch_type == 'one':
-                result = tuple(cursor.fetchone())
-            cursor.close()
-        return result
-
-    def fetchone(self, statement) -> tuple:
-        return self.__select(statement, 'one')
-
-    def fetchall(self, statement) -> tuple:
-        return self.__select(statement, 'all')
-
     def create_tables(self, tables: list=None) -> bool:
         if not tables:
             tables = self.__get_defined_tables()
         statements = list()
         for table in tables:
             statements.append(self.TABLE_DEFS[table])
-        return self.execute(statements)
+        return self.dbc.execute(statements)
 
     def destroy_tables(self, tables: list=None) -> bool:
         if not tables:
@@ -126,4 +93,4 @@ class DBMaintainer:
         statements = list()
         for table in tables:
             statements.append('drop table {}'.format(table))
-        return self.execute(statements)
+        return self.dbc.execute(statements)
