@@ -6,7 +6,7 @@ import ink.sys.database
 class Records:
 
     def __init__(self):
-        self.dbc = ink.sys.database.Connector(CONF.db_connect_config)
+        self.dbc = ink.sys.database.connect()
 
     def get_boxes(self, user_id: str) -> tuple:
         sql_stmt = '''

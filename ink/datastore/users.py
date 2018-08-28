@@ -8,7 +8,7 @@ import ink.sys.database
 class Users:
 
     def __init__(self):
-        self.dbc = ink.sys.database.Connector(CONF.db_connect_config)
+        self.dbc = ink.sys.database.connect()
         self.salt = 'hoge' # XXX
 
     def get_uid(self, username: str) -> int:
