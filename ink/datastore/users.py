@@ -1,7 +1,4 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-import mysql.connector
 
 from ink.util.security import secure_hashing
 from ink.util.database import DBMaintainer
@@ -19,7 +16,8 @@ class Users:
             select user_id from users where username = '?'
         '''
         user_id = 0
-        row = self.dbm.fetchone((sql_stmt, username))
+        statement = (sql_stmt, (username))
+        row = self.dbm.fetchone(statement)
         if row:
             user_id = int(row[0])
         return user_id
@@ -29,7 +27,8 @@ class Users:
             select username from users where user_id = ?
         '''
         username = ''
-        row = self.dbm.fetchone((sql_stmt, user_id))
+        statement = (sql_stmt, (user_id))
+        row = self.dbm.fetchone(statement)
         if row:
             username = str(row[0])
         return username
@@ -47,7 +46,8 @@ class Users:
         '''
         stored_password = ''
         input_password = secure_hashing(password, self.salt)
-        row = self.dbm.fetchone((sql_stmt, username))
+        statement = (sql_stmt, (username))
+        row = self.dbm.fetchone(statement)
         if row:
             stored_password = str(row[0])
         return stored_password == input_password

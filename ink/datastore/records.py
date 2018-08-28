@@ -1,41 +1,32 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import mysql.connector
-
+from ink.util.database import DBMaintainer
 
 class Records:
-    db_conn_elem: dict
 
     def __init__(self):
-        self.conn: mysql.connector.MySQLConnection
+        self.dbm = DBMaintainer()
 
-    def connect(self):
-        self.conn = mysql.connector.connect(self.db_conn_elem)
-
-    def get_boxes(self, user_id: str) -> list:
+    def get_boxes(self, user_id: str) -> tuple:
         sql_stmt = '''
             select * from boxes where user_id = '?'
         '''
-        cur = self.conn.cursor()
-        sql_args = list(user_id)
-        cur.execute(sql_stmt, sql_args)
+        statement = (sql_stmt, (user_id))
+        return self.dbm.fetchall(statement)
 
-    def get_cards(self, user_num: int, box_num: int) -> list:
+    def get_cards(self, user_id: int, box_id: int) -> tuple:
         sql_stmt = '''
-            select * from cards where user_num = ? and box_num = ?
+            select * from cards where user_id = ? and box_id = ?
         '''
-        cur = self.conn.cursor()
-        sql_args = list(user_num, box_num)
-        cur.execute(sql_stmt, sql_args)
+        statement = (sql_stmt, (user_id, box_id))
+        return self.dbm.fetchall(statement)
 
-    def get_records(self, card_num: int) -> list:
+    def get_records(self, card_id: int) -> tuple:
         sql_stmt = '''
-            select record from records where card_num = ?
+            select record from records where card_id = ?
         '''
-        cur = self.conn.cursor()
-        sql_args = list(card_num)
-        cur.execute(sql_stmt, sql_args)
+        statement = (sql_stmt, (card_id))
+        return self.dbm.fetchall(statement)
 
 
 def get_all():
