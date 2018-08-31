@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ink.util.security import secure_hashing
-from ink.sys.config import CONF
+from ink.sys.config import conf
 import ink.sys.database
 
 

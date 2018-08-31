@@ -2,7 +2,7 @@
 
 import mysql.connector
 
-from ink.sys.config import CONF
+from ink.sys.config import conf
 
 
 class Connector:
@@ -46,4 +46,4 @@ class Connector:
 
 
 def connect():
-    return Connector(CONF.db_connect_config)
+    return Connector(conf.db_connect_config)

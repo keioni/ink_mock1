@@ -2,11 +2,11 @@
 
 import mysql.connector
 
-from ink.sys.config import CONF
+from ink.sys.config import conf
 import ink.sys.database
 
 
-class DBMaintainer:
+class Maintainer:
     '''
     INK System Database Maintainer
     '''
