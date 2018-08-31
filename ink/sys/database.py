@@ -11,7 +11,7 @@ class Connector:
         self.conn = mysql.connector.connect(**db_connect_config)
         self.conn.autocommit(False)
 
-    def __select(self, statement: str, fetch_type: str = 'all') -> tuple:
+    def __fetch(self, statement: str, fetch_type: str = 'all') -> tuple:
         result = tuple()
         cursor = self.conn.cursor()
         if cursor:
@@ -24,10 +24,10 @@ class Connector:
         return result
 
     def fetchone(self, statement) -> tuple:
-        return self.__select(statement, 'one')
+        return self.__fetch(statement, 'one')
 
     def fetchall(self, statement) -> tuple:
-        return self.__select(statement, 'all')
+        return self.__fetch(statement, 'all')
 
     def execute(self, statements: list) -> bool:
         result = False
