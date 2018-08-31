@@ -3,8 +3,9 @@
 
 import os
 
-import ink.sys.config
+from ink.sys.config import ConfigManager
 
 
-conf = ink.sys.config.load()
-print(conf.db_connect_config())
+conf = ConfigManager()
+conf.read()
+print(conf.get_db_connect_config())

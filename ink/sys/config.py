@@ -3,13 +3,21 @@
 import configparser
 import os
 
-class Configure(configparser.ConfigParser):
+class ConfigManager(configparser.ConfigParser):
     '''
-    Configure class.
+    INK System configuration manager.
+
+    Used for customizing system behaviors by config file.
     '''
 
-    # def __init__(self, *args, **kwargs):
-    #     super(Configure, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ConfigManager, self).__init__(*args, **kwargs)
+        self.BOOLEAN_STATES = {'enable': True, 'disable': False}
+
+    def read(self, filename: str = '', encoding = None):
+        if not filename:
+            filename = os.path.dirname(__file__) + '/settings.cfg'
+        super(ConfigManager, self).read(filename, encoding)
 
     def get_db_connect_config(self, section_name: str = 'database'):
         '''
@@ -23,14 +31,3 @@ class Configure(configparser.ConfigParser):
                     value = int(value)
                 db_conf[key] = value
         return db_conf
-
-
-def load(conf_filename: str = '') -> configparser.ConfigParser:
-    conf = Configure()
-    conf.BOOLEAN_STATES = {'enable': True, 'disable': False}
-    if not conf_filename:
-        conf_filename = os.path.dirname(__file__) + '/settings.cfg'
-    if os.path.exists(conf_filename):
-        conf.read(conf_filename)
-
-    return conf
