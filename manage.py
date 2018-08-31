@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ink.sys.config import conf
-import ink.util.database
+import os
+
+import ink.sys.config
+
+
+conf = ink.sys.config.load()
+print(conf.db_connect_config())
