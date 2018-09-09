@@ -6,7 +6,7 @@
     "python.autoComplete.addBrackets": true,
     "python.autoComplete.showAdvancedMembers": true,
     "python.linting.pylintUseMinimalCheckers": true,
-    "python.jediEnabled": false,
+    "python.jediEnabled": true,
     "editor.wordWrap": "on",
     "editor.wordWrapColumn": 80,
     "editor.wrappingIndent": "none",
