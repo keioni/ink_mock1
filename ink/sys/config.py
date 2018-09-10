@@ -3,6 +3,7 @@
 import configparser
 import os
 
+
 class ConfigManager(configparser.ConfigParser):
     '''
     INK System configuration manager.
@@ -52,3 +53,5 @@ class ConfigManager(configparser.ConfigParser):
                     value = int(value)
                 db_conf[key] = value
         return db_conf
+
+gconf = ConfigManager()

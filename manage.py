@@ -3,9 +3,9 @@
 
 import os
 
-from ink.sys.config import ConfigManager
+from ink.sys.config import gconf
 
 
-conf = ConfigManager()
-conf.read()
-print(conf.get_db_connect_config())
+filename = os.path.dirname(__file__) + '/var/settings.cfg'
+gconf.read(filename)
+print(gconf.get_db_connect_config())
