@@ -15,8 +15,8 @@
             "ssl_key": "./ssl/key.pem"
         },
         "debug": {
-            "verbose": "yes",
-            "verbose_level": 2,
+            "debug_print": "yes",
+            "debug_print_level": 2,
             "print_sql_query": "yes"
         }
     }

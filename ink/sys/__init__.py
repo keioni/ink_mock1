@@ -8,7 +8,7 @@ from attrdict import AttrDict
 
 conf = AttrDict()
 
-conf_file = os.environ['INK_CONF_FILE']
+conf_file = os.environ.get('INK_CONF_FILE')
 if conf_file:
     with open(conf_file, 'r') as f:
         raw_conf = json.load(f)
