@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
+from attrdict import AttrDict
 
-from ink.sys.config import gconf
+import ink.sys.config
 
 
-filename = os.path.dirname(__file__) + '/var/settings.cfg'
-gconf.read(filename)
-print(gconf.get_db_connect_config())
+filename = os.path.dirname(__file__) + '/var/settings.json'
+gconf = ink.sys.config.load(filename)
+print(dict(gconf.configurations.database))
