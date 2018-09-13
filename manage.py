@@ -6,4 +6,7 @@ import json
 
 from ink.sys import conf
 
+conf.load(os.environ.get('INK_CONF_FILE'))
+# conf.load(os.environ.get('./var/settings.json'))
 print(conf.database)
+print(conf.database.host)
