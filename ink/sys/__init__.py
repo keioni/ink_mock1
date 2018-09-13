@@ -11,6 +11,16 @@ class Configure:
     def __init__(self):
         self.__conf = {}
 
+    def __getattr__(self, name):
+        if not self.__conf:
+            msg = 'Configuration file does not loaded.'
+            raise AttributeError(msg)
+        values = self.__conf.get(name)
+        if values:
+            return AttrDict(values)
+        msg = 'No configuration values of name: {}'.format(name)
+        raise AttributeError(msg)
+
     def load(self, conf_file: str, force_load: bool=False):
         if self.__conf:
             if not force_load:
@@ -26,15 +36,6 @@ class Configure:
             raise ValueError(msg)
         self.__conf = raw_conf.get('configurations')
 
-    def __getattr__(self, name):
-        if not self.__conf:
-            msg = 'Configuration file does not loaded.'
-            raise AttributeError(msg)
-        values = self.__conf.get(name)
-        if values:
-            return AttrDict(values)
-        msg = 'No configuration values of name: {}'.format(name)
-        raise AttributeError(msg)
 
 conf = Configure()
 
