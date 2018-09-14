@@ -1,14 +1,33 @@
 # -*- coding: utf-8 -*-
+'''INK system configuration module.
 
-import os
+This module is used to customizing INK system settings.
+When you want to access any settings, you must use
+the instance -- already created when imported timing --
+of this class 'CONF' on this module.
+
+For example:
+    from ink.sys.config import CONF
+
+    CONF.load(path_to_setting_file)
+    some_instance.do_something(CONF.toplevel.secondlevel)
+'''
+
+
+# import os
 import json
 
 from attrdict import AttrDict
 
 
 class Configure:
+    '''INK system configuration manager.
 
-    def __init__(self, conf_dict: dict=None):
+    How to use this class, see module docstring.
+    '''
+
+
+    def __init__(self, conf_dict: dict = None):
         self.__conf = {}
         if conf_dict:
             self.__conf = conf_dict
@@ -29,10 +48,25 @@ class Configure:
     # def __str__(self):
     #     return json.dumps(self.__conf, indent=4)
 
-    def load(self, conf_file: str, force_load: bool=False):
+    def load(self, conf_file: str, force_load: bool = False):
+        '''load json format setting file.
+
+        Arguments:
+            * conf_file {str} -- file name of the setting file.
+            * force_load {bool} -- In default, if setting file was
+              already loaded, raise exception. If you need load
+              twice or more and override loaded settings, change
+              True. (default: {False})
+
+        Return value:
+            Return {True} when settings is loaded successfully.
+            This method raise ValueError exception instead of
+            returning {False}. So use try-except.
+        '''
+
         if self.__conf:
             if not force_load:
-                msg = 'Still loaded.'
+                msg = 'Always loaded.'
                 raise ValueError(msg)
         with open(conf_file, 'r') as f:
             self.__conf = json.load(f)
@@ -45,9 +79,10 @@ class Configure:
         if not self.__conf.get('configurations'):
             msg = "Setting file's format is invalid."
             raise ValueError(msg)
+        return True
 
 
-conf = Configure()
+CONF = Configure()
 
 # conf = AttrDict()
 

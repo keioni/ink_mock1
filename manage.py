@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import os
-import json
 
-from ink.sys.config import conf
+from ink.sys.config import CONF
 
-conf_file = os.environ.get('INK_CONF_FILE')
-if not conf_file:
-    conf_file = './var/settings.json'
-conf.load(conf_file, True)
-print(conf)
-print(conf.database)
-print(conf.database.host)
+def hoge1():
+    conf_file = os.environ.get('INK_CONF_FILE')
+    if not conf_file:
+        conf_file = './var/settings.json'
+    CONF.load(conf_file, True)
+    print(CONF)
+    print(CONF.database)
+    print(CONF.database.host)
+
+hoge1()
