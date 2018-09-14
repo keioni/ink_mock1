@@ -4,7 +4,7 @@
 import os
 import json
 
-from ink.sys import conf
+from ink.sys.config import conf
 
 conf_file = os.environ.get('INK_CONF_FILE')
 if not conf_file:

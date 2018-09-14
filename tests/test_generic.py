@@ -6,7 +6,7 @@ import pytest
 
 # os.environ['INK_CONF_FILE'] = './tests/settings_for_unittest.json'
 # import ink.sys
-from ink.sys import conf
+from ink.sys.config import conf
 
 # def test_get_file_name():
 #     assert ink.sys.conf_file
