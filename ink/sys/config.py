@@ -14,7 +14,7 @@ For example:
 '''
 
 
-# import os
+import os
 import json
 
 from attrdict import AttrDict
@@ -29,8 +29,16 @@ class Configure:
 
     def __init__(self, conf_dict: dict = None):
         self.__conf = {}
+        self.__files = []
         if conf_dict:
             self.__conf = conf_dict
+        else:
+            conf_dir = __file__ + '../../..'
+            conf_file = os.path.abspath(conf_dir + '/var/settings.json')
+            if os.path.exists(conf_file):
+                with open(conf_file, 'r') as f:
+                    self.__conf = json.load(f)
+                self.__files.append(conf_file)
 
     def __getattr__(self, name):
         if not self.__conf:
@@ -80,6 +88,12 @@ class Configure:
             msg = "Setting file's format is invalid."
             raise ValueError(msg)
         return True
+
+    def is_loaded(self) -> bool:
+        return bool(self.__conf)
+
+    def clear(self):
+        self.__conf.clear()
 
 
 CONF = Configure()
